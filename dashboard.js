@@ -1,4 +1,6 @@
 
+const path = require('path');
+
 let database;
 
 module.exports = {
@@ -7,7 +9,14 @@ module.exports = {
 		database = att;
 	},
 
-	index: function(req, res) {
-		res.send(data);
+	index: async function(req, res) {
+		res.sendFile(path.join(__dirname, 'index.html'));
+	},
+
+	data: async function(req, res) {
+		let result = await database.queryAsync(
+			'SELECT starttime, endtime, temp, pres, humd, wisp, wdir, rain ' +
+			'FROM data ORDER BY starttime DESC LIMIT 20');
+		res.send(result);
 	}
 };
