@@ -2,6 +2,7 @@
 const express = require('express');
 const receiver = require('./receive');
 const dashboard = require('./dashboard');
+const repository = require('./repository');
 const dbConn = require("./dbConn");
 require("dotenv").config({ path: ".env" });
 
@@ -14,8 +15,8 @@ const database = new dbConn(console, {
 	'charset': 'utf8mb4'
 }, {retryMinTimeout: 2000, retryMaxTimeout: 60000}).connect();
 
-receiver.attach(database);
-dashboard.attach(database);
+receiver.attach(database, repository);
+dashboard.attach(database, repository);
 
 const app = express();
 const port = 8000;

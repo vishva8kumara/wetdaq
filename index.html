@@ -73,19 +73,17 @@
 	  humidityData.addColumn('datetime', 'Time');
 	  humidityData.addColumn('number', 'Humidity');
 	  //
-      const temperature = metrics[0].temp || 0;
-      const pressure = metrics[0].pres || 0;
-      const humidity = metrics[0].humd || 0;
+	  let data = metrics.data;
+      const temperature = metrics.recent ? 1.0*metrics.recent.temp : data[0].temp;
+      const pressure = metrics.recent ? 1.0*metrics.recent.prs : data[0].pres;
+      const humidity = metrics.recent ? 1.0*metrics.recent.hum : data[0].humd;
 
       // Update line chart dataset
-	  for (let i = 0 ; i < metrics.length; i++) {
-        tempData.addRow([new Date(metrics[i].endtime), metrics[i].temp]);
-        pressureData.addRow([new Date(metrics[i].endtime), metrics[i].pres]);
-        humidityData.addRow([new Date(metrics[i].endtime), metrics[i].humd]);
+	  for (let i = 0 ; i < data.length; i++) {
+        tempData.addRow([new Date(data[i].endtime), data[i].temp]);
+        pressureData.addRow([new Date(data[i].endtime), data[i].pres]);
+        humidityData.addRow([new Date(data[i].endtime), data[i].humd]);
 	  }
-	  console.log(tempData);
-	  console.log(pressureData);
-	  console.log(humidityData);
 
       // Gauges
       tempGaugeData = google.visualization.arrayToDataTable([
@@ -114,25 +112,28 @@
       if (!lineChart1) lineChart1 = new google.visualization.LineChart(document.getElementById('temp_chart'));
       lineChart1.draw(tempData, {
         curveType: 'function',
+        legend: 'none',
         hAxis: { format: 'HH:mm' }
       });
 	  //
       if (!lineChart2) lineChart2 = new google.visualization.LineChart(document.getElementById('pressure_chart'));
       lineChart2.draw(pressureData, {
         curveType: 'function',
+        legend: 'none',
         hAxis: { format: 'HH:mm' }
       });
 	  //
       if (!lineChart3) lineChart3 = new google.visualization.LineChart(document.getElementById('humidity_chart'));
       lineChart3.draw(humidityData, {
         curveType: 'function',
+        legend: 'none',
         hAxis: { format: 'HH:mm' }
       });
 	  //
     }
 
     function fetchMetrics() {
-      fetch('/data')
+      fetch('/data?device=c987fad0-d518-4c52-a7e2-78fcf5f3df3b')
         .then(res => res.json())
         .then(data => drawCharts(data))
         .catch(err => console.error('Error fetching metrics:', err));
