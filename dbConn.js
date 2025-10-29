@@ -1,5 +1,5 @@
 
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
 module.exports = function(logger, config, dbConnRetryParams){
 
