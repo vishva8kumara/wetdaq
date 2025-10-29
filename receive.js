@@ -56,32 +56,6 @@ async function processFiveMinuteSample(now) {
 	database.queryAsync(insertSQL, [windowStart, now, avgTemp, avgPres, avgHumd, avgWisp, avgWdir, avgRain]);
 	//
 	windowStart = now;
-	/*/
-	const momSum = calculateSum(values);
-	const momLength = values.length;
-	values = [];
-	//
-	const output = {
-		"window_start": now,
-		"count": momLength,
-		"sum": momSum
-	};
-	console.log(output);
-	//
-	const frame = {
-		'temp': dat.temp,
-		'pres': dat.prs,
-		'humd': dat.hum,
-		'wisp': dat.wsp,
-		'wdir': dat.wdir,
-		'rain': dat.rin
-	};
-	data.push(frame);
-	console.log(frame);
-	//
-	while (data.lengh > 25)
-		data.shift();
-	/*/
 }
 
 let latch = false;
@@ -89,14 +63,14 @@ async function aggregate() {
 	let now = new Date();
 	const sec = now.getSeconds();
 	if (sec > 10)
-		latch = false;
+		latch = true;
 	//
 	else if (sec >= 0) {
-		if ( ! latch ) {
-			if (now.getMinutes() % 5) {
+		if ( latch ) {
+			if (now.getMinutes() % 5 == 0) {
 				processFiveMinuteSample(now);
 			}
-			latch = true;
+			latch = false;
 		}
 	}
 	setTimeout(aggregate, 100);
