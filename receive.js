@@ -17,13 +17,15 @@ module.exports = {
 	receive: function(req, res) {
 		const dat = req.body;
 		//
+		//console.log(dat);
 		count += 1;
-		sumTemp += dat.temp;
-		sumPres += dat.prs;
-		sumHumd += dat.hum;
-		sumWisp += dat.wsp;
-		sumWdir += dat.wdir;
-		sumRain += dat.rin;
+		sumTemp += 1.0 * dat.temp;
+		sumPres += 1.0 * dat.prs;
+		sumHumd += 1.0 * dat.hum;
+		sumWisp += 1.0 * dat.wsp;
+		sumWdir += 1.0 * dat.wdir;
+		sumRain += 1.0 * dat.rin;
+		//console.log('[', sumTemp, sumPres, sumHumd, sumWisp, sumWdir, sumRain, '] /', count);
 		//
 		res.status(201).send('ok');
 	}
@@ -67,7 +69,7 @@ async function aggregate() {
 	//
 	else if (sec >= 0) {
 		if ( latch ) {
-			if (now.getMinutes() % 5 == 0) {
+			if (now.getMinutes() % 1 == 0) {
 				processFiveMinuteSample(now);
 			}
 			latch = false;
