@@ -69,7 +69,7 @@ async function aggregate() {
 	//
 	else if (sec >= 0) {
 		if ( latch ) {
-			if (now.getMinutes() % 1 == 0) {
+			if (now.getMinutes() % 5 == 0) {
 				processFiveMinuteSample(now);
 			}
 			latch = false;
