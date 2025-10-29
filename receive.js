@@ -45,7 +45,7 @@ async function processFiveMinuteSample(now) {
 	const avgHumd = sumHumd / count;
 	const avgWisp = sumWisp / count;
 	const avgWdir = sumWdir / count;
-	const avgRain = sumRain / count;
+	const avgRain = sumRain;
 	//
 	count = 0;
 	sumTemp = 0;
