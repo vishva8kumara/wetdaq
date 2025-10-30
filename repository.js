@@ -32,7 +32,7 @@ function device(_id) {
 	let sumSinWdir = 0;
 	let sumCosWdir = 0;
 	let sumRain = 0;
-	let recent;
+	let recent, clearRecent;
 	//
 	this.enqueue = function(dat){
 		count += 1;
@@ -44,6 +44,8 @@ function device(_id) {
 		sumCosWdir += Math.cos(dat.wdir * Math.PI / 180);
 		sumRain += 1.0 * dat.rin;
 		recent = dat;
+		//clearTimeout(clearRecent);
+		//clearRecent = setTimeout(function(){ recent = false; }, 10000);
 	};
 	//
 	this.getRecent = function(){

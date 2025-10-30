@@ -5,6 +5,7 @@ const dashboard = require('./dashboard');
 const repository = require('./repository');
 const dbConn = require("./dbConn");
 require("dotenv").config({ path: ".env" });
+//const basicAuth = require("./basicAuth");
 
 const database = new dbConn(console, {
 	'host': process.env.DATABASE_HOST.trim(),
@@ -19,7 +20,7 @@ receiver.attach(database, repository);
 dashboard.attach(database, repository);
 
 const app = express();
-const port = 8000;
+const port = process.env.PORT || 8000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -33,5 +34,5 @@ app.get('/devices', dashboard.devices);
 app.post('/rx', receiver.receive);
 
 app.listen(port, function() {
-	console.log('Listening to /rx');
+  console.log('Listening on port', port);
 });
