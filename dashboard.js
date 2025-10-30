@@ -28,11 +28,12 @@ module.exports = {
 
 	data: async function(req, res) {
 		const device = req.query.device;
+		const limit = 1 * req.query.limit;
 		let result = await database.queryAsync(
 			'SELECT starttime, endtime, temp, pres, humd, wisp, wdir, rain ' +
 			'FROM data '+
 			(device ? 'WHERE device = ? ' : '')+
-			'ORDER BY starttime DESC LIMIT 120', (device ? [device] : []));
+			'ORDER BY starttime DESC LIMIT ?', (device ? [device, limit] : [limit]));
 		//
 		if (device) {
 			dev = repository.getDevice(device, false);
