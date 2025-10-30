@@ -36,17 +36,18 @@ h3 {
 
 input, select, button {
 	font-family: sans-serif;
-	padding: 6px 12px;
 	border-radius: 3px;
 	border: 1px solid #838a96;
 }
 
 input, select {
+	padding: 6px 3px;
 	outline: 0px none;
 	background-color: #FFFFFF;
 }
 
 button {
+	padding: 6px 8px;
 	cursor: pointer;
 	background-color: #abc3f1;
 }
