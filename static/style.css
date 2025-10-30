@@ -7,17 +7,20 @@ body {
 }
 
 h1 {
-	margin: 0px 0px 14px 0px;
+	margin: -20px -20px 14px -20px;
+	padding: 8px 23px;
+	box-shadow: 0px 0px 15px -7px #000000;
+	background-color: #d3dfef;
 }
 
 h3 {
-	margin: 0px 0px 10px 0px;
+	margin: -4px 0px 10px 0px;
 }
 
 .controllers {
 	float: right;
 	white-space: nowrap;
-	margin-top: 3px;
+	margin-top: 12px;
 }
 
 #charts {
@@ -44,7 +47,8 @@ input, select {
 }
 
 button {
-	background-color: #cfd7e7;
+	cursor: pointer;
+	background-color: #abc3f1;
 }
 
 .chart-box {

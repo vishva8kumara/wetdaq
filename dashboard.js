@@ -11,6 +11,7 @@ module.exports = {
 	},
 
 	index: async function(req, res) {
+		console.log(req.ip, req.headers['user-agent']);
 		res.sendFile(path.join(__dirname, 'index.html'));
 	},
 

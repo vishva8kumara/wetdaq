@@ -5,9 +5,9 @@ let tempGauge, pressureGauge, humidityGauge, lineChart1, lineChart2, lineChart3,
 let tempGaugeData, pressureGaugeData, humidityGaugeData;
 let csvString = '';
 
-let tempGaugeOptions = { min: 0, max: 100, redFrom: 80, yellowFrom: 60, minorTicks: 5 };
-let pressureGaugeOptions = { min: 0, max: 200, redFrom: 150, yellowFrom: 120, minorTicks: 5 };
-let humidityGaugeOptions = { min: 0, max: 100, redFrom: 60, yellowFrom: 45, minorTicks: 5 };
+let tempGaugeOptions = { min: 18, max: 72, redFrom: 55, yellowFrom: 45, minorTicks: 5 };
+let pressureGaugeOptions = { min: 50, max: 150, redFrom: 180, yellowFrom: 160, minorTicks: 5 };
+let humidityGaugeOptions = { min: 10, max: 80, redFrom: 75, yellowFrom: 70, minorTicks: 5 };
 
 let lastStartTime = null;
 let lastEndTime = null;
@@ -78,7 +78,7 @@ function drawCharts(metrics) {
 	curveType: 'function',
 	legend: 'none',
 	hAxis: { format: 'HH:mm' },
-	chartArea: {width: '95%', height: '85%', top: 8, left: '5%'}
+	chartArea: {width: '88%', height: '85%', top: 8, left: '5%', right: 8}
   };
   if (!lineChart1) lineChart1 = new google.visualization.LineChart(document.getElementById('temp_chart'));
   lineChart1.draw(tempData, chartOptions);
@@ -109,7 +109,7 @@ function fetchMetrics() {
     selDevice.innerHTML = '';
     for (let dev of data.devices)
       selDevice.appendChild(arc.elem(
-        'option', '[' + ( dev.online ? 'v' : 'x' ) + '] ' + dev.name,
+        'option', ( dev.online ? '🟢' : '⚠️' ) + ' ' + dev.name,
         (selected == dev.name ? {value: dev.name, selected: true} : {value: dev.name})
       ));
   })
