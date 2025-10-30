@@ -24,6 +24,8 @@ const port = 8000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Serve static files from the 'public' directory
+app.use('/static', express.static('./static'));
 app.get('/', dashboard.index);
 app.get('/data', dashboard.data);
 app.get('/devices', dashboard.devices);

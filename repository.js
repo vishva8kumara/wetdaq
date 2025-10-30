@@ -58,16 +58,18 @@ function device(_id) {
 
 module.exports = {
 
-	listDivices: function(){
+	listDevices: function(){
 		return devices;
 	},
 
-	getDivice: function(id){
+	getDevice: function(id, create=true){
 		if (devices[id])
 			return devices[id];
 		//
 		else {
-			devices[id] = new device(id);
+			if (create)
+				devices[id] = new device(id);
+			//
 			return devices[id];
 		}
 	}

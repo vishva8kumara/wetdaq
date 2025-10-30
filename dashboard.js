@@ -16,11 +16,12 @@ module.exports = {
 
 	devices: async function(req, res) {
 		const result = await database.queryAsync('SELECT DISTINCT device FROM data');
-		const devices = repository.listDivices();
+		const devices = repository.listDevices();
 		//
 		let output = [];
 		for (let row of result) {
-			output.push({name: row.device, online: (devices[row.device] ? true : false)});
+			output.push({name: row.device, online: (
+				devices[row.device] && devices[row.device].getRecent() ? true : false)});
 		}
 		res.send({devices: output});
 	},
@@ -34,8 +35,8 @@ module.exports = {
 			'ORDER BY starttime DESC LIMIT 120', (device ? [device] : []));
 		//
 		if (device) {
-			dev = repository.getDivice(device);
-			const recent = dev.getRecent();
+			dev = repository.getDevice(device, false);
+			const recent = dev ? dev.getRecent() : dev;
 			res.send({data: result, recent: recent});
 		}
 		else

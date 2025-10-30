@@ -11,7 +11,7 @@ module.exports = {
 	receive: function(req, res) {
 		const dat = req.body;
 		//
-		const device = repository.getDivice(dat.device);
+		const device = repository.getDevice(dat.device, true);
 		device.enqueue(dat);
 		//
 		res.status(201).send('ok');
@@ -23,7 +23,7 @@ const insertSQL = 'INSERT INTO data (starttime, endtime, device, temp, pres, hum
 	'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
 async function processFiveMinuteSample(now) {
-	const devices = repository.listDivices();
+	const devices = repository.listDevices();
 	for (let device in devices) {
 		let aggResult = devices[ device ].aggregateOut(now);
 		if (aggResult) {
