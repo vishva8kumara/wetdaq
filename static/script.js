@@ -74,20 +74,26 @@ function drawCharts(metrics) {
     csvString += `${data[i].starttime},${data[i].endtime},${data[i].temp},${data[i].pres},${data[i].humd},${data[i].wisp},${data[i].wdir},${data[i].rain}\n`;
   }
 
+  const chartOptions = {
+	curveType: 'function',
+	legend: 'none',
+	hAxis: { format: 'HH:mm' },
+	chartArea: {width: '95%', height: '85%', top: 8, left: '5%'}
+  };
   if (!lineChart1) lineChart1 = new google.visualization.LineChart(document.getElementById('temp_chart'));
-  lineChart1.draw(tempData, { curveType: 'function', legend: 'none', hAxis: { format: 'HH:mm' } });
+  lineChart1.draw(tempData, chartOptions);
 
   if (!lineChart2) lineChart2 = new google.visualization.LineChart(document.getElementById('pressure_chart'));
-  lineChart2.draw(pressureData, { curveType: 'function', legend: 'none', hAxis: { format: 'HH:mm' } });
+  lineChart2.draw(pressureData, chartOptions);
 
   if (!lineChart3) lineChart3 = new google.visualization.LineChart(document.getElementById('humidity_chart'));
-  lineChart3.draw(humidityData, { curveType: 'function', legend: 'none', hAxis: { format: 'HH:mm' } });
+  lineChart3.draw(humidityData, chartOptions);
 
   if (!windScatter) windScatter = new google.visualization.ScatterChart(document.getElementById('wind_scatter'));
   windScatter.draw(windData, {
-    title: 'Wind Speed & Direction',
-    hAxis: { title: 'East-West Component' },
-    vAxis: { title: 'North-South Component' },
+    hAxis: { title: 'West  -  East' },
+    vAxis: { title: 'South  -  North' },
+	chartArea: {width: '85%', height: '80%', top: 8, left: 42},
     legend: 'none',
     pointSize: 5,
     tooltip: { isHtml: true }

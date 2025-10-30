@@ -1,19 +1,29 @@
 
 body {
 	font-family: sans-serif;
-	margin: 2em;
+	margin: 20px;
 	background: #f0f0f0;
 	color: #333;
 }
 
 h1 {
-	margin-bottom: 1em;
+	margin: 0px 0px 14px 0px;
+}
+
+h3 {
+	margin: 0px 0px 10px 0px;
+}
+
+.controllers {
+	float: right;
+	white-space: nowrap;
+	margin-top: 3px;
 }
 
 #charts {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 2em;
+	gap: 20px;
 }
 
 .chart {
@@ -29,19 +39,22 @@ input, select, button {
 }
 
 input, select {
+	outline: 0px none;
 	background-color: #FFFFFF;
 }
 
 button {
-	background-color: #bbcae6;
+	background-color: #cfd7e7;
 }
 
 .chart-box {
 	background: white;
-	padding: 1em;
+	padding: 20px;
 	border-radius: 8px;
 	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 	width: 18%;
+	max-width: 100%;
+	overflow: hidden;
 }
 
 .gauge{
@@ -49,5 +62,5 @@ button {
 }
 
 .gauge table{
-	margin: 0px auto;
+	margin: 25px auto 0px auto !important;
 }

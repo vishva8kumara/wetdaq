@@ -7,18 +7,20 @@
   <script src="/static/arc.js"></script>
 </head>
 <body>
+  <div class="controllers">
+    Device: <select name="device"></select>
+    &nbsp;&nbsp;
+	Show last: <select name="limit">
+      <option value="5">5 records</option>
+      <option value="10">10 records</option>
+      <option value="20">20 records</option>
+      <option value="40" selected>40 records</option>
+      <option value="80">80 records</option>
+    </select>
+    &nbsp;&nbsp;
+	<button id="download_csv">Download CSV</button>
+  </div>
   <h1>Live Weather Monitoring</h1>
-  Device: <select name="device"></select>
-  &nbsp;&nbsp;Show last:
-  <select name="limit">
-    <option value="5">5 records</option>
-    <option value="10">10 records</option>
-    <option value="20">20 records</option>
-    <option value="40" selected>40 records</option>
-    <option value="80">80 records</option>
-  </select>
-  &nbsp;&nbsp;<button id="download_csv">Download CSV</button>
-  <br/>&nbsp;
   <div id="charts">
     <div class="chart-box">
       <h3>Temperature (&deg;C)</h3>
@@ -32,15 +34,19 @@
       <h3>Humidity (Rel %)</h3>
       <div id="humd_gauge" class="gauge"></div>
     </div>
-    <div class="chart-box" style="width:28%;">
+    <div class="chart-box" style="width:calc(46% - 220px);">
       <h3>Wind Speed & Direction</h3>
-      <div id="wind_scatter" class="chart"></div>
+      <div id="wind_scatter" class="chart" style="height:240px;"></div>
     </div>
     <div class="chart-box" style="width:100%;">
       <h3>Temperature Over Time</h3>
       <div id="temp_chart" class="chart"></div>
+    </div>
+    <div class="chart-box" style="width:100%;">
       <h3>Pressure Over Time</h3>
       <div id="pressure_chart" class="chart"></div>
+    </div>
+    <div class="chart-box" style="width:100%;">
       <h3>Humidity Over Time</h3>
       <div id="humidity_chart" class="chart"></div>
     </div>
