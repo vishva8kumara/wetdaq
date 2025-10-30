@@ -4,7 +4,7 @@ google.charts.setOnLoadCallback(startMonitoring);
 let tempGauge, pressureGauge, humidityGauge, lineChart1, lineChart2, lineChart3;
 let tempGaugeData, pressureGaugeData, humidityGaugeData, lineChartData1, lineChartData2, lineChartData3;
 let tempGaugeOptions = { min: 0, max: 100, redFrom: 80, yellowFrom: 60, minorTicks: 5 };
-let pressureGaugeOptions = { min: 0, max: 2000, redFrom: 1500, yellowFrom: 1200, minorTicks: 5 };
+let pressureGaugeOptions = { min: 0, max: 200, redFrom: 150, yellowFrom: 120, minorTicks: 5 };
 let humidityGaugeOptions = { min: 0, max: 100, redFrom: 60, yellowFrom: 45, minorTicks: 5 };
 
 function drawCharts(metrics) {
@@ -20,34 +20,34 @@ function drawCharts(metrics) {
 	//
 	let data = metrics.data;
 	const temperature = metrics.recent ? 1.0*metrics.recent.temp : data[0].temp;
-	const pressure = metrics.recent ? 1.0*metrics.recent.prs : data[0].pres;
+	const pressure = metrics.recent ? 0.1*metrics.recent.prs : data[0].pres/10;
 	const humidity = metrics.recent ? 1.0*metrics.recent.hum : data[0].humd;
 
 	// Update line chart dataset
 	for (let i = 0 ; i < data.length; i++) {
-	tempData.addRow([new Date(data[i].endtime), data[i].temp]);
-	pressureData.addRow([new Date(data[i].endtime), data[i].pres]);
-	humidityData.addRow([new Date(data[i].endtime), data[i].humd]);
+		tempData.addRow([new Date(data[i].endtime), data[i].temp]);
+		pressureData.addRow([new Date(data[i].endtime), data[i].pres/10]);
+		humidityData.addRow([new Date(data[i].endtime), data[i].humd]);
 	}
 
 	// Gauges
 	tempGaugeData = google.visualization.arrayToDataTable([
-	['Label', 'Value'],
-	['Temperature', temperature]
+		['Label', 'Value'],
+		['Temperature', temperature]
 	]);
 	pressureGaugeData = google.visualization.arrayToDataTable([
-	['Label', 'Value'],
-	['Pressure', pressure]
+		['Label', 'Value'],
+		['Pressure', pressure]
 	]);
 	humidityGaugeData = google.visualization.arrayToDataTable([
-	['Label', 'Value'],
-	['Humidity', humidity]
+		['Label', 'Value'],
+		['Humidity', humidity]
 	]);
 
 	if (!tempGauge) {
-	tempGauge = new google.visualization.Gauge(document.getElementById('cpu_temp_gauge'));
-	pressureGauge = new google.visualization.Gauge(document.getElementById('drive_temp_gauge'));
-	humidityGauge = new google.visualization.Gauge(document.getElementById('pch_temp_gauge'));
+		tempGauge = new google.visualization.Gauge(document.getElementById('temp_gauge'));
+		pressureGauge = new google.visualization.Gauge(document.getElementById('pres_gauge'));
+		humidityGauge = new google.visualization.Gauge(document.getElementById('humd_gauge'));
 	}
 	tempGauge.draw(tempGaugeData, tempGaugeOptions);
 	pressureGauge.draw(pressureGaugeData, pressureGaugeOptions);
@@ -56,23 +56,23 @@ function drawCharts(metrics) {
 	// Line Chart
 	if (!lineChart1) lineChart1 = new google.visualization.LineChart(document.getElementById('temp_chart'));
 	lineChart1.draw(tempData, {
-	curveType: 'function',
-	legend: 'none',
-	hAxis: { format: 'HH:mm' }
+		curveType: 'function',
+		legend: 'none',
+		hAxis: { format: 'HH:mm' }
 	});
 	//
 	if (!lineChart2) lineChart2 = new google.visualization.LineChart(document.getElementById('pressure_chart'));
 	lineChart2.draw(pressureData, {
-	curveType: 'function',
-	legend: 'none',
-	hAxis: { format: 'HH:mm' }
+		curveType: 'function',
+		legend: 'none',
+		hAxis: { format: 'HH:mm' }
 	});
 	//
 	if (!lineChart3) lineChart3 = new google.visualization.LineChart(document.getElementById('humidity_chart'));
 	lineChart3.draw(humidityData, {
-	curveType: 'function',
-	legend: 'none',
-	hAxis: { format: 'HH:mm' }
+		curveType: 'function',
+		legend: 'none',
+		hAxis: { format: 'HH:mm' }
 	});
 	//
 }

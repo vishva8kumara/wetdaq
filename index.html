@@ -1,35 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>System Metrics</title>
+  <title>Weather Metrics</title>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <link type="text/css" rel="stylesheet" href="/static/style.css" />
   <script src="/static/arc.js"></script>
 </head>
 <body>
-  <h1>Live System Monitoring</h1>
+  <h1>Live Weather Monitoring</h1>
   Device: <select name="device"></select>
   <br/>&nbsp;
   <div id="charts">
     <div class="chart-box">
-      <h3>Temperature (°C)</h3>
-      <div id="cpu_temp_gauge"></div>
+      <h3>Temperature (&deg;C)</h3>
+      <div id="temp_gauge"></div>
     </div>
     <div class="chart-box">
-      <h3>Atm. Pressure</h3>
-      <div id="drive_temp_gauge"></div>
+      <h3>Atm. Pressure (kPa)</h3>
+      <div id="pres_gauge"></div>
     </div>
     <div class="chart-box">
-      <h3>Humidity</h3>
-      <div id="pch_temp_gauge"></div>
+      <h3>Humidity (Rel %)</h3>
+      <div id="humd_gauge"></div>
     </div>
     <div class="chart-box" style="width: 100%;">
       <h3>Temperature Over Time</h3>
-      <div id="temp_chart" style="width: 100%; height: 300px;"></div>
+      <div id="temp_chart" class="chart"></div>
       <h3>Pressure Over Time</h3>
-      <div id="pressure_chart" style="width: 100%; height: 300px;"></div>
+      <div id="pressure_chart" class="chart"></div>
       <h3>Humidity Over Time</h3>
-      <div id="humidity_chart" style="width: 100%; height: 300px;"></div>
+      <div id="humidity_chart" class="chart"></div>
     </div>
   </div>
 
