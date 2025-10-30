@@ -5,9 +5,9 @@ let tempGauge, pressureGauge, humidityGauge, lineChart1, lineChart2, lineChart3,
 let tempGaugeData, pressureGaugeData, humidityGaugeData;
 let csvString = '';
 
-let tempGaugeOptions = { min: 18, max: 72, redFrom: 55, yellowFrom: 45, minorTicks: 5 };
-let pressureGaugeOptions = { min: 50, max: 150, redFrom: 180, yellowFrom: 160, minorTicks: 5 };
-let humidityGaugeOptions = { min: 10, max: 80, redFrom: 75, yellowFrom: 70, minorTicks: 5 };
+let tempGaugeOptions = { min: 18, max: 72, redFrom: 55, yellowFrom: 45, minorTicks: 5, fontName: 'Rubik' };
+let pressureGaugeOptions = { min: 50, max: 150, redFrom: 180, yellowFrom: 160, minorTicks: 5, fontName: 'Rubik' };
+let humidityGaugeOptions = { min: 10, max: 80, redFrom: 75, yellowFrom: 70, minorTicks: 5, fontName: 'Rubik' };
 
 let lastStartTime = null;
 let lastEndTime = null;
@@ -76,7 +76,7 @@ function drawCharts(metrics) {
 
   const chartOptions = {
 	curveType: 'function',
-	legend: 'none',
+	legend: 'none', fontName: 'Rubik',
 	hAxis: { format: 'HH:mm' },
 	chartArea: {width: '88%', height: '85%', top: 8, left: '5%', right: 8}
   };
@@ -94,7 +94,7 @@ function drawCharts(metrics) {
     hAxis: { title: 'West  -  East' },
     vAxis: { title: 'South  -  North' },
 	chartArea: {width: '85%', height: '80%', top: 8, left: 42},
-    legend: 'none',
+    legend: 'none', fontName: 'Rubik',
     pointSize: 5,
     tooltip: { isHtml: true }
   });

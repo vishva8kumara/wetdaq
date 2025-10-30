@@ -1,6 +1,6 @@
 
 body {
-	font-family: sans-serif;
+	font-family: "Rubik", sans-serif;
 	margin: 20px;
 	background: #f0f0f0;
 	color: #333;
@@ -9,8 +9,29 @@ body {
 h1 {
 	margin: -20px -20px 14px -20px;
 	padding: 8px 23px;
+	color: #213046;
 	box-shadow: 0px 0px 15px -7px #000000;
+	/*background-color: #d3dfef;*/
+}
+
+h1::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 53px;
+	mix-blend-mode: darken;
+	background: linear-gradient(to right, #d3dfef 0%, #b6c3d4 50%);
+	/*
 	background-color: #d3dfef;
+	filter: url(#grainy-noise);
+	background-image:
+		url("data:image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' width='0' height='0' aria-hidden='true'%3E%3Cfilter id='grainy-noise' x='0' y='0' width='1' height='1'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch' /%3E%3CfeBlend mode='screen' /%3E%3C/filter%3E%3C/svg%3E"),
+		linear-gradient(to right, rgba(170, 203, 255, 0.8) 0%, #5697ff 50%);
+	background-blend-mode: overlay;
+	*/
+	z-index: -1;
 }
 
 h3 {
@@ -34,8 +55,12 @@ h3 {
 	height: 300px;
 }
 
+svg text {
+	font-family: "Rubik", sans-serif;
+}
+
 input, select, button {
-	font-family: sans-serif;
+	font-family: "Rubik", sans-serif;
 	border-radius: 3px;
 	border: 1px solid #838a96;
 }
