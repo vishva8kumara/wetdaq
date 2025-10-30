@@ -9,42 +9,20 @@ let tempGaugeOptions = { min: 0, max: 100, redFrom: 80, yellowFrom: 60, minorTic
 let pressureGaugeOptions = { min: 0, max: 200, redFrom: 150, yellowFrom: 120, minorTicks: 5 };
 let humidityGaugeOptions = { min: 0, max: 100, redFrom: 60, yellowFrom: 45, minorTicks: 5 };
 
+let lastStartTime = null;
+let lastEndTime = null;
+
 function drawCharts(metrics) {
-  let tempData = new google.visualization.DataTable();
-  tempData.addColumn('datetime', 'Time');
-  tempData.addColumn('number', 'Temperature');
-  let pressureData = new google.visualization.DataTable();
-  pressureData.addColumn('datetime', 'Time');
-  pressureData.addColumn('number', 'Pressure');
-  let humidityData = new google.visualization.DataTable();
-  humidityData.addColumn('datetime', 'Time');
-  humidityData.addColumn('number', 'Humidity');
-  let windData = new google.visualization.DataTable();
-  windData.addColumn('number', 'X');
-  windData.addColumn('number', 'Y');
-  windData.addColumn({type: 'string', role: 'tooltip', p: {html: true}});
-
   const data = metrics.data;
-  csvString = 'starttime,endtime,temperature,pressure,humdity,windspeed,winddirection,rainfall\n';
+  if (!data || data.length === 0) return;
 
+  const firstEnd = data[0].endtime;
+  const lastEnd = data[data.length - 1].endtime;
+
+  // Always re-render gauges for real-time values
   const temperature = metrics.recent ? 1.0 * metrics.recent.temp : data[0].temp;
   const pressure = metrics.recent ? 0.1 * metrics.recent.prs : data[0].pres / 10;
   const humidity = metrics.recent ? 1.0 * metrics.recent.hum : data[0].humd;
-
-  for (let i = 0; i < data.length; i++) {
-    tempData.addRow([new Date(data[i].endtime), data[i].temp]);
-    pressureData.addRow([new Date(data[i].endtime), data[i].pres / 10]);
-    humidityData.addRow([new Date(data[i].endtime), data[i].humd]);
-
-    // Convert direction (°) and speed to x/y and prepare tooltip
-    const rad = data[i].wdir * Math.PI / 180;
-    const x = data[i].wisp * Math.cos(rad);
-    const y = data[i].wisp * Math.sin(rad);
-    const tooltip = `<div style="padding:5px 10px;"><b>Wind Speed:</b> ${data[i].wisp.toFixed(2)} m/s<br><b>Direction:</b> ${data[i].wdir.toFixed(0)}°</div>`;
-    windData.addRow([x, y, tooltip]);
-
-    csvString += `${data[i].starttime},${data[i].endtime},${data[i].temp},${data[i].pres},${data[i].humd},${data[i].wisp},${data[i].wdir},${data[i].rain}\n`;
-  }
 
   tempGaugeData = google.visualization.arrayToDataTable([['Label', 'Value'], ['Temperature', temperature]]);
   pressureGaugeData = google.visualization.arrayToDataTable([['Label', 'Value'], ['Pressure', pressure]]);
@@ -59,6 +37,42 @@ function drawCharts(metrics) {
   tempGauge.draw(tempGaugeData, tempGaugeOptions);
   pressureGauge.draw(pressureGaugeData, pressureGaugeOptions);
   humidityGauge.draw(humidityGaugeData, humidityGaugeOptions);
+
+  // Only redraw charts if data window changed
+  if (firstEnd === lastStartTime && lastEnd === lastEndTime) return;
+
+  lastStartTime = firstEnd;
+  lastEndTime = lastEnd;
+
+  let tempData = new google.visualization.DataTable();
+  tempData.addColumn('datetime', 'Time');
+  tempData.addColumn('number', 'Temperature');
+  let pressureData = new google.visualization.DataTable();
+  pressureData.addColumn('datetime', 'Time');
+  pressureData.addColumn('number', 'Pressure');
+  let humidityData = new google.visualization.DataTable();
+  humidityData.addColumn('datetime', 'Time');
+  humidityData.addColumn('number', 'Humidity');
+  let windData = new google.visualization.DataTable();
+  windData.addColumn('number', 'X');
+  windData.addColumn('number', 'Y');
+  windData.addColumn({ type: 'string', role: 'tooltip', p: { html: true } });
+
+  csvString = 'starttime,endtime,temperature,pressure,humdity,windspeed,winddirection,rainfall\n';
+
+  for (let i = 0; i < data.length; i++) {
+    tempData.addRow([new Date(data[i].endtime), data[i].temp]);
+    pressureData.addRow([new Date(data[i].endtime), data[i].pres / 10]);
+    humidityData.addRow([new Date(data[i].endtime), data[i].humd]);
+
+    const rad = data[i].wdir * Math.PI / 180;
+    const x = data[i].wisp * Math.cos(rad);
+    const y = data[i].wisp * Math.sin(rad);
+    const tooltip = `<div style="padding:5px 10px;"><b>Wind Speed:</b> ${data[i].wisp.toFixed(2)} m/s<br><b>Direction:</b> ${data[i].wdir.toFixed(0)}°</div>`;
+    windData.addRow([x, y, tooltip]);
+
+    csvString += `${data[i].starttime},${data[i].endtime},${data[i].temp},${data[i].pres},${data[i].humd},${data[i].wisp},${data[i].wdir},${data[i].rain}\n`;
+  }
 
   if (!lineChart1) lineChart1 = new google.visualization.LineChart(document.getElementById('temp_chart'));
   lineChart1.draw(tempData, { curveType: 'function', legend: 'none', hAxis: { format: 'HH:mm' } });

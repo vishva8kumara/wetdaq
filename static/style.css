@@ -21,6 +21,21 @@ h1 {
 	height: 300px;
 }
 
+input, select, button {
+	font-family: sans-serif;
+	padding: 6px 12px;
+	border-radius: 3px;
+	border: 1px solid #838a96;
+}
+
+input, select {
+	background-color: #FFFFFF;
+}
+
+button {
+	background-color: #bbcae6;
+}
+
 .chart-box {
 	background: white;
 	padding: 1em;
