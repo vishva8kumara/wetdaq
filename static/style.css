@@ -87,10 +87,38 @@ button {
 	overflow: hidden;
 }
 
+.chart-box.wind {
+	width: calc(46% - 220px);
+}
+
 .gauge{
 	text-align: center;
 }
 
 .gauge table{
 	margin: 25px auto 0px auto !important;
+}
+
+@media screen and (max-width: 900px) {
+
+	h1:after {
+		height: 93px;
+	}
+
+	.chart-box {
+		width: calc(32% - 44px);
+	}
+
+	.chart-box.wind {
+		width: 100%;
+	}
+
+}
+
+@media screen and (max-width: 650px) {
+
+	.chart-box {
+		width: 100%;
+	}
+
 }

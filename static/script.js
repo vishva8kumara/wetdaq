@@ -109,7 +109,7 @@ function fetchMetrics() {
     selDevice.innerHTML = '';
     for (let dev of data.devices)
       selDevice.appendChild(arc.elem(
-        'option', ( dev.online ? '🟢' : '⚠️' ) + ' ' + dev.name,
+        'option', ( dev.online ? '🟢' : '⚠️' ) + ' ' + dev.name.split('-')[0],
         (selected == dev.name ? {value: dev.name, selected: true} : {value: dev.name})
       ));
   })
