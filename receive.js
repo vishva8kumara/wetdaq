@@ -11,10 +11,15 @@ module.exports = {
 	receive: function(req, res) {
 		const dat = req.body;
 		//
-		const device = repository.getDevice(dat.device, true);
-		device.enqueue(dat);
-		//
-		res.status(201).send('ok');
+		if (dat.device && dat.temp && dat.prs && dat.hum) {
+			const device = repository.getDevice(dat.device, true);
+			device.enqueue(dat);
+			//
+			res.status(201).send('ok');
+		}
+		else {
+			res.status(403).send('bad request');
+		}
 	}
 
 };
