@@ -26,6 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get('/', dashboard.index);
 app.get('/data', dashboard.data);
+app.get('/devices', dashboard.devices);
 
 app.post('/rx', receiver.receive);
 

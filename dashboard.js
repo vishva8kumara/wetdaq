@@ -14,6 +14,17 @@ module.exports = {
 		res.sendFile(path.join(__dirname, 'index.html'));
 	},
 
+	devices: async function(req, res) {
+		const result = await database.queryAsync('SELECT DISTINCT device FROM data');
+		const devices = repository.listDivices();
+		//
+		let output = [];
+		for (let row of result) {
+			output.push({name: row.device, online: (devices[row.device] ? true : false)});
+		}
+		res.send({devices: output});
+	},
+
 	data: async function(req, res) {
 		const device = req.query.device;
 		let result = await database.queryAsync(
