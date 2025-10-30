@@ -22,28 +22,33 @@ function drawCharts(metrics) {
   let windData = new google.visualization.DataTable();
   windData.addColumn('number', 'X');
   windData.addColumn('number', 'Y');
+  windData.addColumn({type: 'string', role: 'tooltip', p: {html: true}});
 
   const data = metrics.data;
   csvString = 'starttime,endtime,temperature,pressure,humdity,windspeed,winddirection,rainfall\n';
 
-  const temperature = metrics.recent ? 1.0*metrics.recent.temp : data[0].temp;
-  const pressure = metrics.recent ? 0.1*metrics.recent.prs : data[0].pres/10;
-  const humidity = metrics.recent ? 1.0*metrics.recent.hum : data[0].humd;
+  const temperature = metrics.recent ? 1.0 * metrics.recent.temp : data[0].temp;
+  const pressure = metrics.recent ? 0.1 * metrics.recent.prs : data[0].pres / 10;
+  const humidity = metrics.recent ? 1.0 * metrics.recent.hum : data[0].humd;
 
   for (let i = 0; i < data.length; i++) {
     tempData.addRow([new Date(data[i].endtime), data[i].temp]);
-    pressureData.addRow([new Date(data[i].endtime), data[i].pres/10]);
+    pressureData.addRow([new Date(data[i].endtime), data[i].pres / 10]);
     humidityData.addRow([new Date(data[i].endtime), data[i].humd]);
-    // Convert direction (°) and speed to x/y
+
+    // Convert direction (°) and speed to x/y and prepare tooltip
     const rad = data[i].wdir * Math.PI / 180;
-    windData.addRow([data[i].wisp * Math.cos(rad), data[i].wisp * Math.sin(rad)]);
+    const x = data[i].wisp * Math.cos(rad);
+    const y = data[i].wisp * Math.sin(rad);
+    const tooltip = `<div style="padding:5px 10px;"><b>Wind Speed:</b> ${data[i].wisp.toFixed(2)} m/s<br><b>Direction:</b> ${data[i].wdir.toFixed(0)}°</div>`;
+    windData.addRow([x, y, tooltip]);
 
     csvString += `${data[i].starttime},${data[i].endtime},${data[i].temp},${data[i].pres},${data[i].humd},${data[i].wisp},${data[i].wdir},${data[i].rain}\n`;
   }
 
-  tempGaugeData = google.visualization.arrayToDataTable([ ['Label', 'Value'], ['Temperature', temperature] ]);
-  pressureGaugeData = google.visualization.arrayToDataTable([ ['Label', 'Value'], ['Pressure', pressure] ]);
-  humidityGaugeData = google.visualization.arrayToDataTable([ ['Label', 'Value'], ['Humidity', humidity] ]);
+  tempGaugeData = google.visualization.arrayToDataTable([['Label', 'Value'], ['Temperature', temperature]]);
+  pressureGaugeData = google.visualization.arrayToDataTable([['Label', 'Value'], ['Pressure', pressure]]);
+  humidityGaugeData = google.visualization.arrayToDataTable([['Label', 'Value'], ['Humidity', humidity]]);
 
   if (!tempGauge) {
     tempGauge = new google.visualization.Gauge(document.getElementById('temp_gauge'));
@@ -70,7 +75,8 @@ function drawCharts(metrics) {
     hAxis: { title: 'East-West Component' },
     vAxis: { title: 'North-South Component' },
     legend: 'none',
-    pointSize: 5
+    pointSize: 5,
+    tooltip: { isHtml: true }
   });
 }
 
