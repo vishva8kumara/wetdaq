@@ -62,19 +62,20 @@ svg text {
 input, select, button {
 	font-family: "Rubik", sans-serif;
 	border-radius: 4px;
-	border: 1px solid #768295;
 }
 
 input, select {
-	padding: 6px 3px;
+	padding: 5px 3px;
 	outline: 0px none;
 	background-color: #FFFFFF;
+	border: 1px solid #899dbd;
 }
 
 button {
 	padding: 6px 8px;
 	cursor: pointer;
 	background-color: #abc3f1;
+	border: 1px solid #76829580;
 }
 
 .chart-box {
@@ -119,6 +120,20 @@ button {
 
 	.chart-box {
 		width: 100%;
+	}
+
+}
+
+@media screen and (max-width: 550px) {
+
+	h1 {
+		/*margin-top: -17px;*/
+		text-align: center;
+	}
+
+	.controllers {
+		margin-top: 10px;
+		margin-bottom: 5px;
 	}
 
 }

@@ -23,6 +23,9 @@ function drawCharts(metrics) {
   const temperature = metrics.recent ? 1.0 * metrics.recent.temp : data[0].temp;
   const pressure = metrics.recent ? 0.1 * metrics.recent.prs : data[0].pres / 10;
   const humidity = metrics.recent ? 1.0 * metrics.recent.hum : data[0].humd;
+  if (metrics.recent) {
+    console.log('Wind: ', metrics.recent.wdir, metrics.recent.wsp);
+  }
 
   tempGaugeData = google.visualization.arrayToDataTable([['Label', 'Value'], ['Temperature', temperature]]);
   pressureGaugeData = google.visualization.arrayToDataTable([['Label', 'Value'], ['Pressure', pressure]]);
@@ -78,7 +81,7 @@ function drawCharts(metrics) {
 	curveType: 'function',
 	legend: 'none', fontName: 'Rubik',
 	hAxis: { format: 'HH:mm' },
-	chartArea: {width: '88%', height: '85%', top: 8, left: '5%', right: 8}
+	chartArea: {width: '88%', height: '85%', top: 8, left: '5%', right: 15}
   };
   if (!lineChart1) lineChart1 = new google.visualization.LineChart(document.getElementById('temp_chart'));
   lineChart1.draw(tempData, chartOptions);
