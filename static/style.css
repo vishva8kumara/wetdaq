@@ -100,6 +100,21 @@ button {
 	margin: 25px auto 0px auto !important;
 }
 
+#wind_scatter {
+	position: relative;
+}
+
+.wind-overlay {
+	position: absolute;
+	pointer-events: none;
+	width: 0px;
+	height: 0px;
+	border-left: 4px solid transparent;
+	border-right: 4px solid transparent;
+	border-bottom: 20px solid rgb(22 79 201 / 75%);
+	transition: transform 0.3s ease-out;
+}
+
 @media screen and (max-width: 900px) {
 
 	h1:after {

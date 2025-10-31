@@ -24,8 +24,11 @@ function drawCharts(metrics) {
   const pressure = metrics.recent ? 0.1 * metrics.recent.prs : data[0].pres / 10;
   const humidity = metrics.recent ? 1.0 * metrics.recent.hum : data[0].humd;
   if (metrics.recent) {
-    console.log('Wind: ', metrics.recent.wdir, metrics.recent.wsp);
+    //console.log('Wind: ', metrics.recent.wdir, metrics.recent.wsp);
+	updateWindOverlay(metrics.recent.wdir, metrics.recent.wsp);
   }
+  else
+	updateWindOverlay(false, false);
 
   tempGaugeData = google.visualization.arrayToDataTable([['Label', 'Value'], ['Temperature', temperature]]);
   pressureGaugeData = google.visualization.arrayToDataTable([['Label', 'Value'], ['Pressure', pressure]]);
@@ -69,8 +72,8 @@ function drawCharts(metrics) {
     humidityData.addRow([new Date(data[i].endtime), data[i].humd]);
 
     const rad = data[i].wdir * Math.PI / 180;
-    const x = data[i].wisp * Math.cos(rad);
-    const y = data[i].wisp * Math.sin(rad);
+    const x = data[i].wisp * Math.sin(rad);
+    const y = data[i].wisp * Math.cos(rad);
     const tooltip = `<div style="padding:5px 10px;"><b>Wind Speed:</b> ${data[i].wisp.toFixed(2)} m/s<br><b>Direction:</b> ${data[i].wdir.toFixed(0)}°</div>`;
     windData.addRow([x, y, tooltip]);
 
@@ -145,4 +148,34 @@ function startMonitoring() {
     URL.revokeObjectURL(url);
   });
   setInterval(fetchMetrics, 1000);
+}
+
+let windOverlay;
+function updateWindOverlay(direction, speed) {
+  const chartDiv = document.getElementById('wind_scatter');
+  if (!chartDiv) return;
+
+  // Create or update overlay arrow
+  if (!windOverlay) {
+	windOverlay = arc.elem('div', null, { class: 'wind-overlay' });
+  }
+  if (!windOverlay.parentNode) {
+    chartDiv.appendChild(windOverlay);
+  }
+
+  if (direction == false || speed == false) {
+	windOverlay.style.display = 'none';
+  }
+  else {
+	windOverlay.style.display = 'block';
+
+    // Position at chart center and rotate according to direction
+    const rect = chartDiv.getBoundingClientRect();
+    const centerX = rect.width / 2 - 8;
+    const centerY = rect.height / 2 - 8;
+
+    windOverlay.style.left = centerX + 'px';
+    windOverlay.style.top = centerY + 'px';
+    windOverlay.style.transform = `rotate(${direction}deg) scale(${1 + speed / 5})`;
+  }
 }
