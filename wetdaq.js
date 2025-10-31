@@ -5,7 +5,7 @@ const dashboard = require('./dashboard');
 const repository = require('./repository');
 const dbConn = require("./dbConn");
 require("dotenv").config({ path: ".env" });
-//const basicAuth = require("./basicAuth");
+const basicAuth = require("./basicAuth");
 
 const database = new dbConn(console, {
 	'host': process.env.DATABASE_HOST.trim(),
@@ -27,9 +27,10 @@ app.use(express.urlencoded({ extended: true }));
 
 // Serve static files from the 'public' directory
 app.use('/static', express.static('./static'));
-app.get('/', dashboard.index);
-app.get('/data', dashboard.data);
-app.get('/devices', dashboard.devices);
+app.get('/', basicAuth, dashboard.index);
+app.get('/data', basicAuth, dashboard.data);
+app.get('/devices', basicAuth, dashboard.devices);
+app.get('/per-day', basicAuth, dashboard.perDay);
 
 app.post('/rx', receiver.receive);
 

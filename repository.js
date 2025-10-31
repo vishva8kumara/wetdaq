@@ -40,9 +40,9 @@ function device(_id) {
 		sumPres += 1.0 * dat.prs;
 		sumHumd += 1.0 * dat.hum;
 		sumWisp += 1.0 * dat.wsp;
-		sumSinWdir += Math.sin(dat.wdir * Math.PI / 180);
-		sumCosWdir += Math.cos(dat.wdir * Math.PI / 180);
 		sumRain += 1.0 * dat.rin;
+		sumSinWdir += dat.wsp * Math.sin(dat.wdir * Math.PI / 180);
+		sumCosWdir += dat.wsp * Math.cos(dat.wdir * Math.PI / 180);
 		recent = dat;
 		//clearTimeout(clearRecent);
 		//clearRecent = setTimeout(function(){ recent = false; }, 10000);
@@ -62,11 +62,11 @@ function device(_id) {
 		const avgPres = sumPres / count;
 		const avgHumd = sumHumd / count;
 		const avgWisp = sumWisp / count;
-		let avgWdir = Math.atan2(sumSinWdir / count, sumCosWdir / count) * 180 / Math.PI;
 		const totRain = sumRain;
 		const samples = count;
 		const windowSt = windowStart;
 		//
+		let avgWdir = Math.atan2(sumSinWdir, sumCosWdir) * 180 / Math.PI;
 		if (avgWdir < 0)
 			avgWdir += 360;
 		//
