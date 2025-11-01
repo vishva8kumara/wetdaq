@@ -20,16 +20,16 @@ receiver.attach(database, repository);
 dashboard.attach(database, repository);
 
 const app = express();
-const port = process.env.PORT || 8000;
+const port = process.env.PORT.trim() || 8000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files from the 'public' directory
 app.use('/static', express.static('./static'));
-app.get('/', basicAuth, dashboard.index);
-app.get('/data', basicAuth, dashboard.data);
-app.get('/devices', basicAuth, dashboard.devices);
+app.get('/', dashboard.index);
+app.get('/data', dashboard.data);
+app.get('/devices', dashboard.devices);
 app.get('/per-day', basicAuth, dashboard.perDay);
 
 app.post('/rx', receiver.receive);
