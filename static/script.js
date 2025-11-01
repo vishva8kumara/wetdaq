@@ -111,8 +111,6 @@ async function fetchMetrics() {
   try {
     const res = await fetch('/devices');
     const data = await res.json();
-  /*.then(res => res.json())
-  .then(function(data) {*/
     const selected = selDevice.selectedIndex > -1 ? selDevice.options[ selDevice.selectedIndex ].value : false;
     selDevice.innerHTML = '';
     for (let dev of data.devices)
@@ -120,8 +118,6 @@ async function fetchMetrics() {
         'option', ( dev.online ? '🟢' : '⚠️' ) + ' ' + dev.name.split('-')[0],
         (selected == dev.name ? {value: dev.name, selected: true} : {value: dev.name})
       ));
-  /*})
-  .catch(err => console.error('Error fetching devices:', err));*/
   }
   catch (err) {
 	console.error('Error fetching devices:', err);
@@ -134,9 +130,6 @@ async function fetchMetrics() {
   try {
     const res2 = await fetch('/data?device=' + id + '&limit=' + limit);
     const data2 = await res2.json();
-  /*.then(res => res.json())
-  .then(data => drawCharts(data))
-  .catch(err => console.error('Error fetching metrics:', err));*/
     drawCharts(data2);
   }
   catch (err) {
