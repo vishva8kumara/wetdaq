@@ -10,20 +10,26 @@
   <script src="/static/arc.js"></script>
 </head>
 <body>
-  <div class="controllers">
-    Device: <select name="device"></select>
-    &nbsp;&nbsp;
-	Show last: <select name="limit">
-      <option value="5">5 records</option>
-      <option value="10">10 records</option>
-      <option value="20">20 records</option>
-      <option value="40" selected>40 records</option>
-      <option value="80">80 records</option>
-    </select>
-    &nbsp;&nbsp;
-	<button id="download_csv">💾 CSV</button>
-  </div>
-  <h1>Live Weather Monitoring</h1>
+  <header>
+    <h1>Live Weather Monitoring</h1>
+    <div class="controllers">
+      <div class="ctrl">
+	    Device: <select name="device"></select>
+      </div>
+      <div class="ctrl">
+	    Show last: <select name="limit">
+          <option value="5">5 records</option>
+          <option value="10">10 records</option>
+          <option value="20">20 records</option>
+          <option value="40" selected>40 records</option>
+          <option value="80">80 records</option>
+        </select>
+      </div>
+      <div class="ctrl">
+        <button id="download_csv">💾 CSV</button>
+      </div>
+    </div>
+  </header>
   <div id="charts">
     <div class="chart-box">
       <h3>Temperature (&deg;C)</h3>
