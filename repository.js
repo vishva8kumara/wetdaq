@@ -1,5 +1,7 @@
 
 const devices = {};
+//	Consider using Redis in production
+//	https://redis.io/docs/latest/commands/json.arrappend/
 
 module.exports = {
 
