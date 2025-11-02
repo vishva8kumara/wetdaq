@@ -1,12 +1,10 @@
 
 const express = require('express');
-const receiver = require('./receive');
-const dashboard = require('./dashboard');
+const dbConn = require("./utils/dbConn");
+const basicAuth = require("./utils/basicAuth");
 const repository = require('./repository');
-const dbConn = require("./dbConn");
-require("dotenv").config({ path: ".env" });
-const basicAuth = require("./basicAuth");
 
+require("dotenv").config({ path: ".env" });
 const database = new dbConn(console, {
 	'host': process.env.DATABASE_HOST.trim(),
 	'port' : process.env.DATABASE_PORT.trim(),
@@ -16,6 +14,8 @@ const database = new dbConn(console, {
 	'charset': 'utf8mb4'
 }, {retryMinTimeout: 2000, retryMaxTimeout: 60000}).connect();
 
+const receiver = require('./receive');
+const dashboard = require('./dashboard');
 receiver.attach(database, repository);
 dashboard.attach(database, repository);
 
