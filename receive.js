@@ -6,6 +6,7 @@ module.exports = {
 	attach: function (db, repo) {
 		database = db;
 		repository = repo;
+		aggregate();
 	},
 
 	receive: function(req, res) {
@@ -55,4 +56,3 @@ async function aggregate() {
 	}
 	setTimeout(aggregate, 100);
 }
-aggregate();
