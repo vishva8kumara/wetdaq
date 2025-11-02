@@ -1,0 +1,6 @@
+
+arduino/arduino_secrets.h
+.env
+node_modules/
+package-lock.json
+
