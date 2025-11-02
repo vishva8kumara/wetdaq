@@ -2,8 +2,10 @@
 const express = require('express');
 const receiver = require('./receive');
 const dashboard = require('./dashboard');
+const repository = require('./repository');
 const dbConn = require("./dbConn");
 require("dotenv").config({ path: ".env" });
+const basicAuth = require("./basicAuth");
 
 const database = new dbConn(console, {
 	'host': process.env.DATABASE_HOST.trim(),
@@ -14,20 +16,24 @@ const database = new dbConn(console, {
 	'charset': 'utf8mb4'
 }, {retryMinTimeout: 2000, retryMaxTimeout: 60000}).connect();
 
-receiver.attach(database);
-dashboard.attach(database);
+receiver.attach(database, repository);
+dashboard.attach(database, repository);
 
 const app = express();
-const port = 8000;
+const port = process.env.PORT.trim() || 8000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Serve static files from the 'public' directory
+app.use('/static', express.static('./static'));
 app.get('/', dashboard.index);
 app.get('/data', dashboard.data);
+app.get('/devices', dashboard.devices);
+app.get('/per-day', basicAuth, dashboard.perDay);
 
 app.post('/rx', receiver.receive);
 
 app.listen(port, function() {
-	console.log('Listening to /rx');
+  console.log('Listening on port', port);
 });

@@ -1,147 +1,72 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>System Metrics</title>
+  <title>Weather Metrics</title>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <style>
-    body {
-      font-family: sans-serif;
-      margin: 2em;
-      background: #f0f0f0;
-      color: #333;
-    }
-    #charts {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2em;
-    }
-    .chart-box {
-      background: white;
-      padding: 1em;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      width: 27%;
-    }
-    h1 {
-      margin-bottom: 1em;
-    }
-  </style>
+  <link type="text/css" rel="stylesheet" href="/static/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  <script src="/static/arc.js"></script>
 </head>
 <body>
-  <h1>Live System Monitoring</h1>
+  <header>
+    <h1>Live Weather Monitoring</h1>
+    <div class="controllers">
+      <div class="ctrl">
+	    Device: <select name="device"></select>
+      </div>
+      <div class="ctrl">
+	    Show last: <select name="limit">
+          <option value="5">5 records</option>
+          <option value="10">10 records</option>
+          <option value="20">20 records</option>
+          <option value="40" selected>40 records</option>
+          <option value="80">80 records</option>
+        </select>
+      </div>
+      <div class="ctrl">
+        <button id="download_csv">💾 CSV</button>
+      </div>
+    </div>
+  </header>
   <div id="charts">
     <div class="chart-box">
-      <h3>Temperature (°C)</h3>
-      <div id="cpu_temp_gauge"></div>
+      <h3>Temperature (&deg;C)</h3>
+      <div id="temp_gauge" class="gauge"></div>
     </div>
     <div class="chart-box">
-      <h3>Atm. Pressure</h3>
-      <div id="drive_temp_gauge"></div>
+      <h3>Atm. Pressure (kPa)</h3>
+      <div id="pres_gauge" class="gauge"></div>
     </div>
     <div class="chart-box">
-      <h3>Humidity</h3>
-      <div id="pch_temp_gauge"></div>
+      <h3>Humidity (Rel %)</h3>
+      <div id="humd_gauge" class="gauge"></div>
     </div>
-    <div class="chart-box" style="width: 100%;">
-      <h3>Temperature Over Time</h3>
-      <div id="temp_chart" style="width: 100%; height: 300px;"></div>
-      <h3>Pressure Over Time</h3>
-      <div id="pressure_chart" style="width: 100%; height: 300px;"></div>
-      <h3>Humidity Over Time</h3>
-      <div id="humidity_chart" style="width: 100%; height: 300px;"></div>
+    <div class="chart-box wind">
+      <h3>Wind Speed & Direction</h3>
+      <div id="wind_scatter" class="chart" style="height:240px;"></div>
+    </div>
+    <div class="chart-box" style="width:100%;">
+      <h3>Temperature Change</h3>
+      <div id="temp_chart" class="chart"></div>
+    </div>
+    <div class="chart-box" style="width:100%;">
+      <h3>Pressure Change</h3>
+      <div id="pressure_chart" class="chart"></div>
+    </div>
+    <div class="chart-box" style="width:100%;">
+      <h3>Humidity Change</h3>
+      <div id="humidity_chart" class="chart"></div>
     </div>
   </div>
+  <svg width="0" height="0" aria-hidden="true">
+    <filter id="grainy-noise" x="0" y="0" width="1" height="1">
+      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
+      <feBlend mode="screen" />
+    </filter>
+  </svg>
 
-  <script>
-    google.charts.load('current', {'packages':['gauge', 'corechart']});
-    google.charts.setOnLoadCallback(startMonitoring);
-
-    let tempGauge, pressureGauge, humidityGauge, lineChart1, lineChart2, lineChart3;
-    let tempGaugeData, pressureGaugeData, humidityGaugeData, lineChartData1, lineChartData2, lineChartData3;
-    let tempGaugeOptions = { min: 0, max: 100, redFrom: 80, yellowFrom: 60, minorTicks: 5 };
-    let pressureGaugeOptions = { min: 0, max: 80, redFrom: 60, yellowFrom: 45, minorTicks: 5 };
-    let humidityGaugeOptions = { min: 0, max: 80, redFrom: 60, yellowFrom: 45, minorTicks: 5 };
-
-    function drawCharts(metrics) {
-      let tempData = new google.visualization.DataTable();
-	  tempData.addColumn('datetime', 'Time');
-	  tempData.addColumn('number', 'Temperature');
-      let pressureData = new google.visualization.DataTable();
-	  pressureData.addColumn('datetime', 'Time');
-	  pressureData.addColumn('number', 'Pressure');
-      let humidityData = new google.visualization.DataTable();
-	  humidityData.addColumn('datetime', 'Time');
-	  humidityData.addColumn('number', 'Humidity');
-	  //
-      const temperature = metrics[0].temp || 0;
-      const pressure = metrics[0].pres || 0;
-      const humidity = metrics[0].humd || 0;
-
-      // Update line chart dataset
-	  for (let i = 0 ; i < metrics.length; i++) {
-        tempData.addRow([new Date(metrics[i].endtime), metrics[i].temp]);
-        pressureData.addRow([new Date(metrics[i].endtime), metrics[i].pres]);
-        humidityData.addRow([new Date(metrics[i].endtime), metrics[i].humd]);
-	  }
-	  console.log(tempData);
-	  console.log(pressureData);
-	  console.log(humidityData);
-
-      // Gauges
-      tempGaugeData = google.visualization.arrayToDataTable([
-        ['Label', 'Value'],
-        ['Temperature', temperature]
-      ]);
-      pressureGaugeData = google.visualization.arrayToDataTable([
-        ['Label', 'Value'],
-        ['Pressure', pressure]
-      ]);
-      humidityGaugeData = google.visualization.arrayToDataTable([
-        ['Label', 'Value'],
-        ['Humidity', humidity]
-      ]);
-
-      if (!tempGauge) {
-        tempGauge = new google.visualization.Gauge(document.getElementById('cpu_temp_gauge'));
-        pressureGauge = new google.visualization.Gauge(document.getElementById('drive_temp_gauge'));
-        humidityGauge = new google.visualization.Gauge(document.getElementById('pch_temp_gauge'));
-      }
-      tempGauge.draw(tempGaugeData, tempGaugeOptions);
-      pressureGauge.draw(pressureGaugeData, pressureGaugeOptions);
-      humidityGauge.draw(humidityGaugeData, humidityGaugeOptions);
-
-      // Line Chart
-      if (!lineChart1) lineChart1 = new google.visualization.LineChart(document.getElementById('temp_chart'));
-      lineChart1.draw(tempData, {
-        curveType: 'function',
-        hAxis: { format: 'HH:mm' }
-      });
-	  //
-      if (!lineChart2) lineChart2 = new google.visualization.LineChart(document.getElementById('pressure_chart'));
-      lineChart2.draw(pressureData, {
-        curveType: 'function',
-        hAxis: { format: 'HH:mm' }
-      });
-	  //
-      if (!lineChart3) lineChart3 = new google.visualization.LineChart(document.getElementById('humidity_chart'));
-      lineChart3.draw(humidityData, {
-        curveType: 'function',
-        hAxis: { format: 'HH:mm' }
-      });
-	  //
-    }
-
-    function fetchMetrics() {
-      fetch('/data')
-        .then(res => res.json())
-        .then(data => drawCharts(data))
-        .catch(err => console.error('Error fetching metrics:', err));
-    }
-
-    function startMonitoring() {
-      fetchMetrics();
-      setInterval(fetchMetrics, 5000); // every 5 seconds
-    }
-  </script>
+  <script src="/static/script.js"></script>
 </body>
 </html>

@@ -1,0 +1,173 @@
+
+body {
+	font-family: "Rubik", sans-serif;
+	margin: 20px;
+	background: #f0f0f0;
+	color: #333;
+}
+
+h1 {
+	float: left;
+	margin: 0px;
+	color: #213046;
+	padding: 8px 23px;
+}
+
+header {
+	height: 55px;
+	margin: -20px -20px 14px -20px;
+	box-shadow: 0px 0px 15px -7px #000000;
+	background: linear-gradient(to right, #d3dfefD0 0%, #b6c3d460 50%);
+	/*background-color: #d3dfef;*/
+}
+
+header::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 55px;
+	mix-blend-mode: darken;
+	filter: url(#grainy-noise);
+	/*
+	background-color: #d3dfef;
+	background-image:
+		url("data:image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' width='0' height='0' aria-hidden='true'%3E%3Cfilter id='grainy-noise' x='0' y='0' width='1' height='1'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch' /%3E%3CfeBlend mode='screen' /%3E%3C/filter%3E%3C/svg%3E"),
+		linear-gradient(to right, rgba(170, 203, 255, 0.8) 0%, #5697ff 50%);
+	background-blend-mode: overlay;
+	*/
+	z-index: -1;
+}
+
+h3 {
+	margin: -4px 0px 10px 0px;
+}
+
+.controllers {
+	float: right;
+	white-space: nowrap;
+	margin: 14px 23px 0px 0px;
+}
+
+.ctrl {
+	display: inline;
+	white-space: nowrap;
+	margin:0px 5px;
+}
+
+#charts {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+}
+
+.chart {
+	width: 100%;
+	height: 300px;
+}
+
+svg text {
+	font-family: "Rubik", sans-serif;
+}
+
+input, select, button {
+	font-family: "Rubik", sans-serif;
+	border-radius: 4px;
+}
+
+input, select {
+	padding: 5px 3px;
+	outline: 0px none;
+	background-color: #FFFFFF;
+	border: 1px solid #899dbd;
+}
+
+button {
+	padding: 6px 8px;
+	cursor: pointer;
+	background-color: #abc3f1;
+	border: 1px solid #76829580;
+}
+
+.chart-box {
+	background: white;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+	width: 18%;
+	max-width: 100%;
+	overflow: hidden;
+}
+
+.chart-box.wind {
+	width: calc(46% - 220px);
+}
+
+.gauge{
+	text-align: center;
+}
+
+.gauge table{
+	margin: 25px auto 0px auto !important;
+}
+
+#wind_scatter {
+	position: relative;
+}
+
+.wind-overlay {
+	position: absolute;
+	pointer-events: none;
+	width: 0px;
+	height: 0px;
+	border-left: 4px solid transparent;
+	border-right: 4px solid transparent;
+	border-bottom: 20px solid rgb(22 79 201 / 75%);
+	transition: transform 0.3s ease-out;
+}
+
+@media screen and (max-width: 921px) {
+
+	header, header:after {
+		height: 93px;
+	}
+
+	h1 {
+		width: 100%;
+		text-align: center;
+		box-sizing: border-box;
+	}
+
+	.controllers {
+		width: 100%;
+		margin: 0px;
+		text-align: center;
+	}
+
+	.chart-box {
+		width: calc(32% - 44px);
+	}
+
+	.chart-box.wind {
+		width: 100%;
+	}
+
+}
+
+@media screen and (max-width: 650px) {
+
+	h1 {
+		font-size: 20pt;
+	}
+
+	.controllers {
+		line-height: 35px;
+		/*white-space: wrap;*/
+	}
+
+	.chart-box {
+		width: 100%;
+	}
+
+}

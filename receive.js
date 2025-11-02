@@ -1,63 +1,41 @@
 
-let database;
-let count = 0;
-let sumTemp = 0;
-let sumPres = 0;
-let sumHumd = 0;
-let sumWisp = 0;
-let sumWdir = 0;
-let sumRain = 0;
+let database, repository;
 
 module.exports = {
 
-	attach: function (att) {
-		database = att;
+	attach: function (db, repo) {
+		database = db;
+		repository = repo;
 	},
 
 	receive: function(req, res) {
 		const dat = req.body;
 		//
-		//console.log(dat);
-		count += 1;
-		sumTemp += 1.0 * dat.temp;
-		sumPres += 1.0 * dat.prs;
-		sumHumd += 1.0 * dat.hum;
-		sumWisp += 1.0 * dat.wsp;
-		sumWdir += 1.0 * dat.wdir;
-		sumRain += 1.0 * dat.rin;
-		//console.log('[', sumTemp, sumPres, sumHumd, sumWisp, sumWdir, sumRain, '] /', count);
-		//
-		res.status(201).send('ok');
+		if (dat.device && dat.temp && dat.prs && dat.hum) {
+			const device = repository.getDevice(dat.device, true);
+			device.enqueue(dat);
+			//
+			res.status(201).send('ok');
+		}
+		else {
+			res.status(403).send('bad request');
+		}
 	}
 
 };
 
-let windowStart = new Date();
-const insertSQL = 'INSERT INTO data (starttime, endtime, temp, pres, humd, wisp, wdir, rain) '+
-	'VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+const insertSQL = 'INSERT INTO data (starttime, endtime, device, temp, pres, humd, wisp, wdir, rain, samples) '+
+	'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
 async function processFiveMinuteSample(now) {
-	if (count == 0)
-		return false;
-	//
-	const avgTemp = sumTemp / count;
-	const avgPres = sumPres / count;
-	const avgHumd = sumHumd / count;
-	const avgWisp = sumWisp / count;
-	const avgWdir = sumWdir / count;
-	const avgRain = sumRain;
-	//
-	count = 0;
-	sumTemp = 0;
-	sumPres = 0;
-	sumHumd = 0;
-	sumWisp = 0;
-	sumWdir = 0;
-	sumRain = 0;
-	//
-	database.queryAsync(insertSQL, [windowStart, now, avgTemp, avgPres, avgHumd, avgWisp, avgWdir, avgRain]);
-	//
-	windowStart = now;
+	const devices = repository.listDevices();
+	for (let device in devices) {
+		let aggResult = devices[ device ].aggregateOut(now);
+		if (aggResult) {
+			let [avgTemp, avgPres, avgHumd, avgWisp, avgWdir, totRain, samples, windowSt] = aggResult;
+			database.queryAsync(insertSQL, [windowSt, now, device, avgTemp, avgPres, avgHumd, avgWisp, avgWdir, totRain, samples]);
+		}
+	}
 }
 
 let latch = false;
