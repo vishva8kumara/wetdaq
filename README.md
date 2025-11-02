@@ -44,7 +44,7 @@ rain          = weatherMeterKit.getTotalRainfall();
 It posts readings every 5 seconds to the server:
 
 ```
-http://<server>/rx
+http://daq.info.lk/rx
 ```
 
 The onboard LED blinks on successful data posts and remains lit on failure.
@@ -61,7 +61,7 @@ The onboard LED blinks on successful data posts and remains lit on failure.
 ### Installation
 
 ```bash
-git clone https://github.com/<yourname>/wetdaq.git
+git clone https://github.com/vishva8kumara/wetdaq.git
 cd wetdaq
 npm install
 ```
@@ -153,7 +153,7 @@ curl -u admin:secret http://localhost:8000/data?format=csv -o weather.csv
 ## 🧰 Development Notes
 
 * The backend uses modular architecture (`wetdaq.js`, `receive.js`, `dashboard.js`, `repository.js`).
-* Aggregation is handled in-memory and flushed every 5 minutes.
+* Aggregation is handled in-memory and flushed every 5 minutes. This is better handled with Redis arrays.
 * Data stored in MySQL with retry-safe connection handling.
 * Frontend powered by Google Charts with minimal re-renders.
 
@@ -161,20 +161,18 @@ curl -u admin:secret http://localhost:8000/data?format=csv -o weather.csv
 
 ## 🧭 Wind Overlay
 
-A red arrow overlay updates in real time on the wind scatter chart.
+A blue arrow overlay updates in real time on the wind scatter chart.
 It is rendered via:
 
 ```js
 arc.elem('div', null, { class: 'wind-overlay' });
 ```
 
-Styled with `wind_overlay.css`.
-
 ---
 
 ## 🧑‍💻 License
 
-MIT License © 2025 — [Your Name]
+MIT License © 2025 — ShilpaSayura
 
 ---
 
@@ -186,7 +184,5 @@ WetDAQ provides a fully open, low-cost, and extensible weather telemetry platfor
 
 ## 🧭 Roadmap
 
-* [ ] WebSocket/MQTT live streaming
-* [ ] Alert notifications for extreme weather
-* [ ] Mobile-friendly dashboard layout
-* [ ] Historical data analytics
+* [ ] Implement Redis to break out of monolithic
+* [ ] AI/ML for disaster prediction
