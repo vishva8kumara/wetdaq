@@ -148,12 +148,14 @@ void beginSensors()
   }
 }
 
+float lastRain = 0;
 void recordSensorData()
 {
   // Weather meter kit data
   windDirection = weatherMeterKit.getWindDirection();
   windSpeed = weatherMeterKit.getWindSpeed();
-  rain = weatherMeterKit.getTotalRainfall();
+  rain = weatherMeterKit.getTotalRainfall() - lastRain;
+  lastRain = rain;
   
   // Soil data
   digitalWrite(pinSoilPower, HIGH);
