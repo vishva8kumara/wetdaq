@@ -4,7 +4,6 @@ const http = require('http');
 
 async function simulate() {
 	const value = 450 + parseInt(Math.random() * 100);
-	const now = new Date();
 	const data = 'device=SIMULATOR&temp='+(33 + (Math.random() * 3))+
 			'&hum='+(60 + (Math.random() * 2))+'&rin=0.00&prs='+(1011 + (Math.random() * 2))+
 			'&wdir='+(270 + (Math.random() * 20))+'&wsp='+(5 + (Math.random() * 2.5));
